@@ -14,10 +14,29 @@ const GameBoard = (() => {
         _board[index] = { mark };
     };
 
+    const addMark = (e) => {
+        const p1 = Game.playerOne;
+        const p2 = Game.playerTwo;
+
+        switch(true) {
+            case p1.turn:
+                e.target.innerText = p1.marker;
+                // updates gameboard object
+                newMark(p1.marker, e.target.getAttribute("data-index"));
+                break;
+
+            case p2.turn:
+                e.target.innerText = p2.marker;
+                newMark(p2.marker, e.target.getAttribute("data-index"));
+                break;
+        }
+        // TO DO: add game logic so already-marked boxes can't be marked again
+    };
+
     return {
         getBoard,
         makeBoard,
-        newMark
+        addMark
     };
 
 })(); // IIFE
@@ -25,7 +44,6 @@ const GameBoard = (() => {
 const Game = (() => {
 
     // TO DO: make player factory function
-
     const playerOne = {
         name: 'Player One',
         marker: 'X',
@@ -40,7 +58,7 @@ const Game = (() => {
         turn: false,
     };
 
-    const switchTurns = () => {
+    const _switchTurns = () => { // Add to Player object?
         if (playerOne.turn === true) {
             playerOne.turn = false;
             playerTwo.turn = true;
@@ -50,27 +68,17 @@ const Game = (() => {
         }
     };
 
-    const addMark = (e) => {
-        switch(true) {
-            case playerOne.turn:
-                e.target.innerText = playerOne.marker;
-                // updates gameboard object
-                GameBoard.newMark(playerOne.marker, e.target.getAttribute("data-index"));
-                break;
-
-            case playerTwo.turn:
-                e.target.innerText = playerTwo.marker;
-                GameBoard.newMark(playerTwo.marker, e.target.getAttribute("data-index"));
-                break;
+    const checkEntry = (e) => {
+        if (e.target.innerText === "") {
+            GameBoard.addMark(e);
+            _switchTurns();
         }
-        // TO DO: add game logic so already-marked boxes can't be marked again
     };
 
     return {
         playerOne,
         playerTwo,
-        addMark,
-        switchTurns,
+        checkEntry,
     }
 })();
 
@@ -79,7 +87,7 @@ const DOM = (() => {
     const startBtn = document.querySelector("#start-btn");
     const gameBoard = GameBoard.getBoard();
 
-    const displayBoard = () => {
+    const _initBoard = () => {
         for (box in gameBoard) {
             const newBox = document.createElement("div");
             newBox.classList.add("box");
@@ -92,15 +100,14 @@ const DOM = (() => {
 
         boxes.forEach((box) => {
             box.addEventListener("click", (e) => {
-                Game.addMark(e);
-                Game.switchTurns();
+                Game.checkEntry(e);
             });
         });
     };
 
     const startGame = () => {
         GameBoard.makeBoard();
-        displayBoard();
+        _initBoard();
         boardDisplay.style.display = "grid";
         startBtn.style.display = "none";
     };
@@ -110,7 +117,6 @@ const DOM = (() => {
     });
 
     return {
-        displayBoard,
     };
 
 })();
