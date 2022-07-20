@@ -6,25 +6,34 @@ body {
 }
 
 body {
+  display: flex;
+  justify-content: center;
   background-color: rgb(162, 162, 162);
 }
 
 #start-btn {
   display: block;
+  height: 40px;
+  width: 100px;
 }
 
 #gameboard {
-  display: grid;
+  display: none;
   grid-template-columns: repeat(3, 100px);
   grid-template-rows: repeat(3, 100px);
-  align-items: center;
-  justify-content: center;
+  gap: 4px;
+  margin: auto;
+  height: max-content;
+  width: max-content;
+  background-color: black;
 }
 #gameboard .box {
-  border: 1px solid black;
+  display: flex;
+  background-color: white;
   height: 100%;
   width: 100%;
-  text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 
 /*# sourceMappingURL=style.css.map */
