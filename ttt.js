@@ -1,6 +1,5 @@
 const GameBoard = (() => {
     const _board = [];
-
     const _box = {mark: ''};
 
     const getBoard = () => {return _board;};
@@ -41,16 +40,41 @@ const Game = (() => {
         turn: false,
     };
 
+    const switchTurns = () => {
+        if (playerOne.turn === true) {
+            playerOne.turn = false;
+            playerTwo.turn = true;
+        } else {
+            playerOne.turn = true;
+            playerTwo.turn = false;
+        }
+    };
+
+    const addMark = (e) => {
+        switch(true) {
+            case playerOne.turn:
+                e.target.innerText = playerOne.marker;
+                // updates gameboard object
+                GameBoard.newMark(playerOne.marker, e.target.getAttribute("data-index"));
+                break;
+
+            case playerTwo.turn:
+                e.target.innerText = playerTwo.marker;
+                GameBoard.newMark(playerTwo.marker, e.target.getAttribute("data-index"));
+                break;
+        }
+        // TO DO: add game logic so already-marked boxes can't be marked again
+    };
+
     return {
         playerOne,
-        playerTwo
+        playerTwo,
+        addMark,
+        switchTurns,
     }
 })();
 
 const DOM = (() => {
-    const playerOne = Game.playerOne;
-    const playerTwo = Game.playerTwo;
-
     const boardDisplay = document.querySelector("#gameboard");
     const startBtn = document.querySelector("#start-btn");
     const gameBoard = GameBoard.getBoard();
@@ -68,7 +92,8 @@ const DOM = (() => {
 
         boxes.forEach((box) => {
             box.addEventListener("click", (e) => {
-                addMarker(e);
+                Game.addMark(e);
+                Game.switchTurns();
             });
         });
     };
@@ -76,6 +101,7 @@ const DOM = (() => {
     const startGame = () => {
         GameBoard.makeBoard();
         displayBoard();
+        boardDisplay.style.display = "grid";
         startBtn.style.display = "none";
     };
 
@@ -83,22 +109,8 @@ const DOM = (() => {
         startGame();
     });
 
-    const addMarker = (e) => {
-        if (playerOne.turn === true) {
-            e.target.innerText = playerOne.marker;
-            GameBoard.newMark(playerOne.marker, e.target.getAttribute("data-index")); // updates gameboard object
-        } else {
-            e.target.innerText = playerTwo.marker;
-            GameBoard.newMark(playerTwo.marker, e.target.getAttribute("data-index"));
-        }
-
-        // TO DO: add game logic so already-marked boxes can't be marked again
-        
-    };
-
     return {
         displayBoard,
-        addMarker
     };
 
 })();
