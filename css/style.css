@@ -14,16 +14,24 @@ body {
   background-color: rgb(162, 162, 162);
 }
 
+button {
+  height: 40px;
+  width: 100px;
+}
+
 #start-btn {
   display: block;
   height: 40px;
   width: 100px;
 }
 
-#again-btn {
+#next-btn {
   display: none;
-  height: 40px;
-  width: 100px;
+  z-index: 2;
+}
+
+#play-again-btn {
+  display: none;
   z-index: 2;
 }
 
