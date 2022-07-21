@@ -1,12 +1,24 @@
 const GameBoard = (() => {
-    const _board = [];
-    const _box = {mark: ''};
+    let _board = [];
+    let _box = {mark: ''};
 
     const getBoard = () => {return _board;};
 
     const makeBoard = () => {
         for(let i=0; i < 9; i++) {
             _board.push(_box.mark);
+        };
+    };
+
+    const clearBoard = () => {
+        const boxes = document.querySelectorAll(".box");
+
+        boxes.forEach((box) => {
+            box.innerText = "";
+        });
+
+        for(let i=0; i < 9; i++) {
+            _board[i] = "";
         };
     };
 
@@ -35,6 +47,7 @@ const GameBoard = (() => {
 
     return {
         getBoard,
+        clearBoard,
         makeBoard,
         addMark
     };
@@ -128,10 +141,12 @@ const Game = (() => {
             if (_checkPattern(pattern, Xs)) {
                 _displayWinner('X');
                 _addPoint('X');
+                DOM.endGame();
 
             } else if (_checkPattern(pattern, Os)) {
                 _displayWinner('O');
                 _addPoint('O');
+                DOM.endGame();
             }
         };
     };
@@ -154,6 +169,7 @@ const Game = (() => {
 const DOM = (() => {
     const boardDisplay = document.querySelector("#gameboard");
     const startBtn = document.querySelector("#start-btn");
+    const againBtn = document.querySelector("#again-btn");
     const gameBoard = GameBoard.getBoard();
 
     const _initBoard = () => {
@@ -182,11 +198,25 @@ const DOM = (() => {
         startBtn.style.display = "none";
     };
 
+    const endGame = () => {
+        if (Game.playerOne.score > 2 || Game.playerTwoscore > 2) {
+            console.log('end');
+        } else {
+            againBtn.style.display = "block";
+            againBtn.addEventListener("click", () => {
+                GameBoard.clearBoard();
+                againBtn.style.display = "none";
+            });
+        };
+    };
+
     startBtn.addEventListener("click", () => {
         startGame();
     });
 
     return {
+        startGame,
+        endGame,
     };
 
 })();
