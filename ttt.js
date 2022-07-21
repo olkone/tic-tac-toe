@@ -174,6 +174,16 @@ const DOM = (() => {
 
     const gameBoard = GameBoard.getBoard();
 
+    const _displayTurn = () => {
+        turnContainer.style.display = "flex";
+
+        if (Game.playerOne.turn === true) {
+            playerTurn.innerText = Game.playerOne.name;
+        } else {
+            playerTurn.innerText = Game.playerTwo.name;
+        };
+    };
+
     const _initBoard = () => {
         for (box in gameBoard) {
             const newBox = document.createElement("div");
@@ -187,8 +197,8 @@ const DOM = (() => {
 
         boxes.forEach((box) => {
             box.addEventListener("click", (e) => {
-                _displayTurn();
                 Game.checkEmpty(e);
+                _displayTurn();
                 Game.checkWinner();
             }); 
         });
@@ -201,20 +211,9 @@ const DOM = (() => {
         p2Score.innerText = Game.playerTwo.score;
     };
 
-    const _displayTurn = () => {
-        turnContainer.style.display = "flex";
-
-        if (Game.playerOne.turn === true) {
-            playerTurn.innerText = Game.playerOne.name;
-        } else {
-            playerTurn.innerText = Game.playerTwo.name;
-        };
-    };
-
     const startGame = () => {
         GameBoard.makeBoard();
         _initBoard();
-        _displayTurn();
         _displayScore();
         gameArea.style.display = "flex";
         startBtn.style.display = "none";
@@ -226,10 +225,10 @@ const DOM = (() => {
         } else {
             againBtn.style.display = "block";
             againBtn.addEventListener("click", () => {
+                _displayTurn();
                 GameBoard.clearBoard();
                 againBtn.style.display = "none";
                 winDisplay.style.display = "none";
-                _displayTurn();
             });
         };
     };
@@ -243,6 +242,7 @@ const DOM = (() => {
 
     startBtn.addEventListener("click", () => {
         startGame();
+        _displayTurn();
     });
 
     return {
