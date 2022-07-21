@@ -20,14 +20,14 @@ const GameBoard = (() => {
 
         switch(true) {
             case p1.turn:
-                e.target.innerText = p1.marker;
+                e.target.innerText = p1.mark;
                 // updates gameboard object
-                _newMark(p1.marker, e.target.getAttribute("data-index"));
+                _newMark(p1.mark, e.target.getAttribute("data-index"));
                 break;
 
             case p2.turn:
-                e.target.innerText = p2.marker;
-                _newMark(p2.marker, e.target.getAttribute("data-index"));
+                e.target.innerText = p2.mark;
+                _newMark(p2.mark, e.target.getAttribute("data-index"));
                 break;
         }
         // TO DO: add game logic so already-marked boxes can't be marked again
@@ -46,7 +46,7 @@ const Game = (() => {
     // TO DO: make player factory function
     const playerOne = {
         name: 'Player One',
-        marker: 'X',
+        mark: 'X',
         score: 0,
         turn: true,
         win: false,
@@ -54,7 +54,7 @@ const Game = (() => {
 
     const playerTwo = {
         name: 'Player Two',
-        marker: 'O',
+        mark: 'O',
         score: 0,
         turn: false,
         win: false,
@@ -103,15 +103,35 @@ const Game = (() => {
 
     }
 
+    // This helps avoid hard-coding a mark to each player
+    function _getPlayerWithMark(mark) {
+        for (player of players) {
+            if (player.mark === mark) {
+                return player;
+            };
+        };
+    };
+
+    const _displayWinner = (mark) => {
+        console.log(_getPlayerWithMark(mark).name + ' wins!');
+    };
+
+    const _addPoint = (mark) => {
+        _getPlayerWithMark(mark).score ++;
+    }
+
     const checkWinner = () => {
         const Os = _getIndices().OIndices;
         const Xs = _getIndices().XIndices;
 
         for (pattern of _winPatterns) {
             if (_checkPattern(pattern, Xs)) {
-                console.log('X wins!');
+                _displayWinner('X');
+                _addPoint('X');
+
             } else if (_checkPattern(pattern, Os)) {
-                console.log('O wins');
+                _displayWinner('O');
+                _addPoint('O');
             }
         };
     };
