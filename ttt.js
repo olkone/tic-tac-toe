@@ -10,7 +10,7 @@ const GameBoard = (() => {
         };
     };
 
-    const newMark = (mark, index) => {
+    const _newMark = (mark, index) => {
         _board[index] = { mark };
     };
 
@@ -22,12 +22,12 @@ const GameBoard = (() => {
             case p1.turn:
                 e.target.innerText = p1.marker;
                 // updates gameboard object
-                newMark(p1.marker, e.target.getAttribute("data-index"));
+                _newMark(p1.marker, e.target.getAttribute("data-index"));
                 break;
 
             case p2.turn:
                 e.target.innerText = p2.marker;
-                newMark(p2.marker, e.target.getAttribute("data-index"));
+                _newMark(p2.marker, e.target.getAttribute("data-index"));
                 break;
         }
         // TO DO: add game logic so already-marked boxes can't be marked again
@@ -49,6 +49,7 @@ const Game = (() => {
         marker: 'X',
         score: 0,
         turn: true,
+        win: false,
     }
 
     const playerTwo = {
@@ -56,9 +57,23 @@ const Game = (() => {
         marker: 'O',
         score: 0,
         turn: false,
+        win: false,
     };
 
-    const _switchTurns = () => { // Add to Player object?
+    const players = [playerOne, playerTwo];
+
+    const _winPatterns = [
+        [0, 1, 2], // Horizontal
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6], // Vertical
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8], // Diagonal
+        [2, 4, 6]
+    ];
+
+    const _switchTurns = () => { // Add to player factory function?
         if (playerOne.turn === true) {
             playerOne.turn = false;
             playerTwo.turn = true;
@@ -68,7 +83,40 @@ const Game = (() => {
         }
     };
 
-    const checkEntry = (e) => {
+    const _getIndices = () => {
+        const board = GameBoard.getBoard();
+        let XIndices = [];
+        let OIndices = [];
+
+        for (box in board) {
+            if (board[box].mark === 'X') {
+                XIndices.push(Number(box));
+            } else if (board[box].mark === 'O') {
+                OIndices.push(Number(box));
+            }
+        }
+        return {XIndices, OIndices}
+    };
+
+    const _checkPattern = (pattern, mark) => {
+        return pattern.every(indices => mark.includes(indices));
+
+    }
+
+    const checkWinner = () => {
+        const Os = _getIndices().OIndices;
+        const Xs = _getIndices().XIndices;
+
+        for (pattern of _winPatterns) {
+            if (_checkPattern(pattern, Xs)) {
+                console.log('X wins!');
+            } else if (_checkPattern(pattern, Os)) {
+                console.log('O wins');
+            }
+        };
+    };
+
+    const checkEmpty = (e) => {
         if (e.target.innerText === "") {
             GameBoard.addMark(e);
             _switchTurns();
@@ -78,7 +126,8 @@ const Game = (() => {
     return {
         playerOne,
         playerTwo,
-        checkEntry,
+        checkEmpty,
+        checkWinner,
     }
 })();
 
@@ -100,7 +149,8 @@ const DOM = (() => {
 
         boxes.forEach((box) => {
             box.addEventListener("click", (e) => {
-                Game.checkEntry(e);
+                Game.checkEmpty(e);
+                Game.checkWinner();
             });
         });
     };
