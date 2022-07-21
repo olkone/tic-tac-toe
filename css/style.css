@@ -1,5 +1,7 @@
 html,
 body {
+  margin: 0;
+  padding: 0;
   height: 100%;
   width: 100%;
   box-sizing: border-box;
@@ -13,6 +15,12 @@ body {
 
 #start-btn {
   display: block;
+  height: 40px;
+  width: 100px;
+}
+
+#again-btn {
+  display: none;
   height: 40px;
   width: 100px;
 }
