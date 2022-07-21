@@ -33,7 +33,6 @@ const GameBoard = (() => {
         switch(true) {
             case p1.turn:
                 e.target.innerText = p1.mark;
-                // updates gameboard object
                 _newMark(p1.mark, e.target.getAttribute("data-index"));
                 break;
 
@@ -41,8 +40,7 @@ const GameBoard = (() => {
                 e.target.innerText = p2.mark;
                 _newMark(p2.mark, e.target.getAttribute("data-index"));
                 break;
-        }
-        // TO DO: add game logic so already-marked boxes can't be marked again
+        };
     };
 
     return {
@@ -117,7 +115,7 @@ const Game = (() => {
     }
 
     // This helps avoid hard-coding a mark to each player
-    function _getPlayerWithMark(mark) {
+    function getPlayerWithMark(mark) {
         for (player of players) {
             if (player.mark === mark) {
                 return player;
@@ -125,12 +123,8 @@ const Game = (() => {
         };
     };
 
-    const _displayWinner = (mark) => {
-        console.log(_getPlayerWithMark(mark).name + ' wins!');
-    };
-
     const _addPoint = (mark) => {
-        _getPlayerWithMark(mark).score ++;
+        getPlayerWithMark(mark).score ++;
     }
 
     const checkWinner = () => {
@@ -139,12 +133,12 @@ const Game = (() => {
 
         for (pattern of _winPatterns) {
             if (_checkPattern(pattern, Xs)) {
-                _displayWinner('X');
+                DOM.displayWinner('X');
                 _addPoint('X');
                 DOM.endGame();
 
             } else if (_checkPattern(pattern, Os)) {
-                _displayWinner('O');
+                DOM.displayWinner('O');
                 _addPoint('O');
                 DOM.endGame();
             }
@@ -163,11 +157,13 @@ const Game = (() => {
         playerTwo,
         checkEmpty,
         checkWinner,
+        getPlayerWithMark,
     }
 })();
 
 const DOM = (() => {
     const boardDisplay = document.querySelector("#gameboard");
+    const winDisplay = document.querySelector("#player-wins");
     const startBtn = document.querySelector("#start-btn");
     const againBtn = document.querySelector("#again-btn");
     const gameBoard = GameBoard.getBoard();
@@ -187,7 +183,7 @@ const DOM = (() => {
             box.addEventListener("click", (e) => {
                 Game.checkEmpty(e);
                 Game.checkWinner();
-            });
+            }); 
         });
     };
 
@@ -206,8 +202,14 @@ const DOM = (() => {
             againBtn.addEventListener("click", () => {
                 GameBoard.clearBoard();
                 againBtn.style.display = "none";
+                winDisplay.style.display = "none";
             });
         };
+    };
+
+    const displayWinner = (mark) => {
+        winDisplay.innerText = Game.getPlayerWithMark(mark).name + ' wins!';
+        winDisplay.style.display = "block";
     };
 
     startBtn.addEventListener("click", () => {
@@ -217,6 +219,7 @@ const DOM = (() => {
     return {
         startGame,
         endGame,
+        displayWinner,
     };
 
 })();
