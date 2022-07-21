@@ -115,7 +115,7 @@ const Game = (() => {
     }
 
     // This helps avoid hard-coding a mark to each player
-    function getPlayerWithMark(mark) {
+    const getPlayerWithMark = (mark) => {
         for (player of players) {
             if (player.mark === mark) {
                 return player;
@@ -133,13 +133,13 @@ const Game = (() => {
 
         for (pattern of _winPatterns) {
             if (_checkPattern(pattern, Xs)) {
-                DOM.displayWinner('X');
                 _addPoint('X');
+                DOM.displayWinner('X');
                 DOM.endGame();
 
             } else if (_checkPattern(pattern, Os)) {
-                DOM.displayWinner('O');
                 _addPoint('O');
+                DOM.displayWinner('O');
                 DOM.endGame();
             }
         };
@@ -162,10 +162,16 @@ const Game = (() => {
 })();
 
 const DOM = (() => {
+    const gameArea = document.querySelector(".game-area");
     const boardDisplay = document.querySelector("#gameboard");
     const winDisplay = document.querySelector("#player-wins");
+
+    const turnContainer = document.querySelector("#turn-cont");
+    const playerTurn = document.querySelector("#player-turn");
+
     const startBtn = document.querySelector("#start-btn");
     const againBtn = document.querySelector("#again-btn");
+
     const gameBoard = GameBoard.getBoard();
 
     const _initBoard = () => {
@@ -181,16 +187,36 @@ const DOM = (() => {
 
         boxes.forEach((box) => {
             box.addEventListener("click", (e) => {
+                _displayTurn();
                 Game.checkEmpty(e);
                 Game.checkWinner();
             }); 
         });
     };
 
+    const _displayScore = () => {
+        const p1Score = document.querySelector("#p1-score");
+        const p2Score = document.querySelector("#p2-score");
+        p1Score.innerText = Game.playerOne.score;
+        p2Score.innerText = Game.playerTwo.score;
+    };
+
+    const _displayTurn = () => {
+        turnContainer.style.display = "flex";
+
+        if (Game.playerOne.turn === true) {
+            playerTurn.innerText = Game.playerOne.name;
+        } else {
+            playerTurn.innerText = Game.playerTwo.name;
+        };
+    };
+
     const startGame = () => {
         GameBoard.makeBoard();
         _initBoard();
-        boardDisplay.style.display = "grid";
+        _displayTurn();
+        _displayScore();
+        gameArea.style.display = "flex";
         startBtn.style.display = "none";
     };
 
@@ -203,13 +229,16 @@ const DOM = (() => {
                 GameBoard.clearBoard();
                 againBtn.style.display = "none";
                 winDisplay.style.display = "none";
+                _displayTurn();
             });
         };
     };
 
     const displayWinner = (mark) => {
         winDisplay.innerText = Game.getPlayerWithMark(mark).name + ' wins!';
+        _displayScore();
         winDisplay.style.display = "block";
+        turnContainer.style.display = "none";
     };
 
     startBtn.addEventListener("click", () => {

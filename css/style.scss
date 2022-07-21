@@ -27,26 +27,41 @@ body {
     z-index: 2;
 }
 
-#gameboard {
+.game-area {
     display: none;
-    grid-template-columns: repeat(3, 100px);
-    grid-template-rows: repeat(3, 100px);
 
-    gap: 4px;
-    
-    margin: auto;
-    height: max-content;
-    width: max-content;
-    background-color: black;
 
-    .box {
-        display: flex;
-        background-color: white;
-        height: 100%;
-        width: 100%;
-        align-items: center;
-        justify-content: center;
+    #turn-cont {
+        display: none;
     }
+
+    #gameboard {
+        display: grid;
+        grid-template-columns: repeat(3, 100px);
+        grid-template-rows: repeat(3, 100px);
+    
+        gap: 4px;
+        
+        margin: auto;
+        height: max-content;
+        width: max-content;
+        background-color: black;
+    
+        .box {
+            display: flex;
+            background-color: white;
+            height: 100%;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+    
+    #scores {
+        display: flex;
+    
+    }
+    
 }
 
 #player-wins {
