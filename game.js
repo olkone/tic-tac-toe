@@ -183,20 +183,20 @@ const DOM = (() => {
     const startArea = document.querySelector(".start-area");
     const gameArea = document.querySelector(".game-area");
     const winDisplay = document.querySelector("#player-wins");
-    const turnContainer = document.querySelector("#turn-cont");
+    const turnDisplay = document.querySelector("#player-turn");
 
     const startBtn = document.querySelector("#start-btn");
     const nextBtn = document.querySelector("#next-btn");
     const againBtn = document.querySelector("#play-again-btn");
 
     const _displayTurn = () => {
-        const playerTurn = document.querySelector("#player-turn");
-        turnContainer.style.display = "flex";
+        turnDisplay.style.display = "block";
+        winDisplay.style.display = "none";
 
         if (Game.playerOne.turn === true) {
-            playerTurn.innerText = Game.playerOne.name;
+            turnDisplay.innerText = Game.playerOne.name;
         } else {
-            playerTurn.innerText = Game.playerTwo.name;
+            turnDisplay.innerText = Game.playerTwo.name;
         };
     };
 
@@ -253,26 +253,30 @@ const DOM = (() => {
     const endGame = () => {
         if (Game.playerOne.score > 2 || Game.playerTwo.score > 2) {
             againBtn.style.display = "block";
+            nextBtn.style.display = "none";
             againBtn.addEventListener("click", () => {
                 _resetGame();
             });
 
         } else {
+            winDisplay.style.display = "flex";
             nextBtn.style.display = "block";
             nextBtn.addEventListener("click", () => {
                 _displayTurn();
                 GameBoard.clearBoard();
-                nextBtn.style.display = "none";
                 winDisplay.style.display = "none";
+                nextBtn.style.display = "none";
             });
         };
     };
 
     const displayWinner = (mark) => {
+
         winDisplay.innerText = Game.getPlayerWithMark(mark).name + ' wins!';
         _displayScore();
-        winDisplay.style.display = "block";
-        turnContainer.style.display = "none";
+        nextBtn.style.display = "block"
+        winDisplay.style.display = "flex";
+        turnDisplay.style.display = "none";
     };
 
     startBtn.addEventListener("click", () => {
@@ -285,5 +289,4 @@ const DOM = (() => {
         endGame,
         displayWinner,
     };
-
 })();
