@@ -24,13 +24,10 @@
         </form>
         <button id="start-btn" onsubmit="return false;">Start Game</button>
     </div>   
-
-    <button id="next-btn">Next Round</button>
-    <button id="play-again-btn">Play Again</button>
-
     <div class="game-area">
-        <div id="turn-cont">
-            <span id="player-turn"></span><span>'s turn</span>
+        <div id="above-board">
+            <p id="player-wins"></p>
+            <p id="player-turn"></p>
         </div>
         <div class="inline">
             <div class="score">
@@ -43,7 +40,8 @@
                 <p id="p2-score"></p>
             </div>
         </div>
+        <button id="next-btn" class="float-btn">Next Round</button>
+        <button id="play-again-btn" class="float-btn">Play Again</button>
     </div>
-    <div id="player-wins"></div>
 </body>
 </html>

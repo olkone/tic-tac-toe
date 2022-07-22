@@ -35,16 +35,7 @@ body {
 button {
   height: 40px;
   width: 100px;
-}
-
-#next-btn {
-  display: none;
-  z-index: 2;
-}
-
-#play-again-btn {
-  display: none;
-  z-index: 2;
+  cursor: pointer;
 }
 
 .game-area {
@@ -52,47 +43,31 @@ button {
   flex: auto;
   flex-flow: column wrap;
   align-items: center;
-  justify-content: center;
-  gap: 40px;
-  height: max-content;
-  margin-top: 15vh;
+  justify-content: flex-start;
+  gap: 20px;
 }
-.game-area #turn-cont {
-  display: none;
-}
-.game-area #gameboard {
-  display: grid;
-  grid-template-columns: repeat(3, 100px);
-  grid-template-rows: repeat(3, 100px);
-  gap: 4px;
-  margin: auto;
-  height: max-content;
-  width: max-content;
-  background-color: rgba(70, 70, 77, 0.94);
-  border-radius: 2px;
-  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.295);
-}
-.game-area #gameboard .box {
+.game-area #above-board {
   display: flex;
-  height: 100%;
-  width: 100%;
+  flex: 0;
+  flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
-  background-color: white;
-  border-radius: 2px;
-  font-family: "Comfortaa", sans-serif;
-  font-size: 2rem;
 }
-.game-area #gameboard .box:hover {
-  background-color: #ececec;
+.game-area #above-board p {
+  height: max-content;
+  width: max-content;
+}
+.game-area #above-board #player-turn::after {
+  content: "'s turn";
 }
 .game-area .inline {
   display: flex;
-  flex: auto;
-  flex-flow: row wrap;
-  justify-content: center;
+  flex: 0;
+  flex-flow: row nowrap;
   align-items: center;
-  gap: 40px;
+  justify-content: center;
+  gap: 20px;
+  height: max-content;
 }
 .game-area .inline .score {
   display: flex;
@@ -103,15 +78,36 @@ button {
 .game-area .inline .score p:last-of-type {
   font-size: 2rem;
 }
-
-#player-wins {
-  display: none;
-  text-align: center;
-  vertical-align: middle;
-  position: fixed;
-  width: 100%;
+.game-area .inline #gameboard {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(3, 100px);
+  gap: 4px;
+  max-height: max-content;
+  background-color: rgba(70, 70, 77, 0.94);
+  border-radius: 2px;
+  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.295);
+}
+.game-area .inline #gameboard .box {
+  display: flex;
   height: 100%;
-  z-index: 1;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 2px;
+  font-family: "Comfortaa", sans-serif;
+  font-size: 2rem;
+}
+.game-area .inline #gameboard .box:hover {
+  background-color: #ececec;
+}
+.game-area .inline #gameboard:hover {
+  cursor: pointer;
+}
+.game-area #play-again-btn,
+.game-area #next-btn {
+  display: none;
 }
 
 /*# sourceMappingURL=style.css.map */
