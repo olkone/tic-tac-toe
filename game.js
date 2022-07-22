@@ -53,6 +53,12 @@ const GameBoard = (() => {
 })(); // IIFE
 
 const Game = (() => {
+    const board = GameBoard.getBoard();
+
+    const getMark = () => {
+        return;
+
+    };
 
     // TO DO: make player factory function
     const playerOne = {
@@ -95,7 +101,7 @@ const Game = (() => {
     };
 
     const _getIndices = () => {
-        const board = GameBoard.getBoard();
+        
         let XIndices = [];
         let OIndices = [];
 
@@ -111,7 +117,6 @@ const Game = (() => {
 
     const _checkPattern = (pattern, mark) => {
         return pattern.every(indices => mark.includes(indices));
-
     }
 
     const _addPoint = (mark) => {
@@ -127,14 +132,25 @@ const Game = (() => {
         };
     };
 
+    const checkTie = () => {
+        const numEmptyBoxes = board.length - board.filter(String).length;
+        
+        if (numEmptyBoxes === 0) {
+            return true;
+        }
+    };
+
     const checkWinner = () => {
         const Os = _getIndices().OIndices;
         const Xs = _getIndices().XIndices;
 
         for (pattern of _winPatterns) {
-            if (_checkPattern(pattern, Xs)) {
+
+            if (_checkPattern(pattern, Xs) === false && _checkPattern(pattern, Os) === false && checkTie() === true) {
+                console.log('tied!!!!!!');
+            } else if (_checkPattern(pattern, Xs)) {
                 _addPoint('X');
-                DOM.displayWinner('X');
+                DOM.displayWinner('X'); // instead, return 'X' then write another function that checks results
                 DOM.endGame();
 
             } else if (_checkPattern(pattern, Os)) {
@@ -157,11 +173,14 @@ const Game = (() => {
         playerTwo,
         checkEmpty,
         checkWinner,
+        checkTie,
         getPlayerWithMark,
-    }
+    };
+
 })();
 
 const DOM = (() => {
+    const startArea = document.querySelector(".start-area");
     const gameArea = document.querySelector(".game-area");
     const winDisplay = document.querySelector("#player-wins");
     const turnContainer = document.querySelector("#turn-cont");
@@ -201,6 +220,7 @@ const DOM = (() => {
                 Game.checkEmpty(e);
                 _displayTurn();
                 Game.checkWinner();
+                Game.checkTie();
             }); 
         });
     };
@@ -217,7 +237,7 @@ const DOM = (() => {
         _initBoard();
         _displayScore();
         gameArea.style.display = "flex";
-        startBtn.style.display = "none";
+        startArea.style.display = "none";
     };
 
     const _resetGame = () => {
