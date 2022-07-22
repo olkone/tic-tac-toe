@@ -16,6 +16,29 @@ body {
   justify-content: center;
 }
 
+button {
+  height: 40px;
+  width: 100px;
+  cursor: pointer;
+  background-color: rgb(241, 241, 241);
+  border: 1px solid rgb(50, 50, 55);
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #dedede;
+}
+
+button:active {
+  background-color: #727272;
+  color: white;
+}
+
+.start-area,
+.game-area {
+  margin-top: 10vh;
+}
+
 .start-area {
   display: flex;
   flex: auto;
@@ -30,12 +53,6 @@ body {
   display: block;
   height: 40px;
   width: 100px;
-}
-
-button {
-  height: 40px;
-  width: 100px;
-  cursor: pointer;
 }
 
 .game-area {
@@ -71,9 +88,14 @@ button {
 }
 .game-area .inline .score {
   display: flex;
-  flex: auto;
+  flex: 0;
   flex-flow: column;
   align-items: center;
+}
+.game-area .inline .score p {
+  margin: 0;
+  max-height: max-content;
+  width: max-content;
 }
 .game-area .inline .score p:last-of-type {
   font-size: 2rem;
