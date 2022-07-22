@@ -50,15 +50,10 @@ const GameBoard = (() => {
         addMark
     };
 
-})(); // IIFE
+})();
 
 const Game = (() => {
     const board = GameBoard.getBoard();
-
-    const getMark = () => {
-        return;
-
-    };
 
     // TO DO: make player factory function
     const playerOne = {
@@ -120,7 +115,9 @@ const Game = (() => {
     }
 
     const _addPoint = (mark) => {
-        getPlayerWithMark(mark).score ++;
+        if (getPlayerWithMark(mark).score < 3) {
+            getPlayerWithMark(mark).score ++;
+        }
     }
 
     // This helps avoid hard-coding a mark to each player
@@ -212,44 +209,49 @@ const DOM = (() => {
 
         switch(Game.checkStatus()) {
             case 'tie':
-                console.log('tied!');
+                _displayTie();
                 _endGame();
                 break;
             
             case 'X':
-                console.log('x works');
                 _displayWinner('X');
                 _endGame();
                 break;
             
             case 'O':
-                console.log('o works');
                 _displayWinner('O');
                 _endGame();
                 break;
         }
     };
 
+    const _addBoxClick = () => {
+        const boxes = document.querySelectorAll(".box");
+        boxes.forEach((box) => {
+            box.addEventListener("click", (e) => {
+                _checkGameStatus(e);
+            });  
+        });
+    };
+
+    const _createBoxes = (box, boardDisplay, gameBoard) => {
+        const newBox = document.createElement("div");
+
+        newBox.classList.add("box");
+        newBox.setAttribute("data-index", box);
+        newBox.innerText = gameBoard[box];
+        boardDisplay.appendChild(newBox); 
+    }
+
     const _initBoard = () => {
         const gameBoard = GameBoard.getBoard();
         const boardDisplay = document.querySelector("#gameboard");
 
         for (box in gameBoard) {
-            const newBox = document.createElement("div");
-
-            newBox.classList.add("box");
-            newBox.setAttribute("data-index", box);
-            newBox.innerText = gameBoard[box];
-            boardDisplay.appendChild(newBox);
+            _createBoxes(box, boardDisplay, gameBoard);
         };
 
-        const boxes = document.querySelectorAll(".box");
-
-        boxes.forEach((box) => {
-            box.addEventListener("click", (e) => {
-                _checkGameStatus(e);
-            }); 
-        });
+        _addBoxClick();
     };
 
     const _displayScore = () => {
@@ -295,6 +297,14 @@ const DOM = (() => {
                 nextBtn.style.display = "none";
             });
         };
+    };
+
+    const _displayTie = () => {
+        winDisplay.innerText = "Tie";
+        _displayScore();
+        nextBtn.style.display = "block"
+        winDisplay.style.display = "flex";
+        turnDisplay.style.display = "none";
     };
 
     const _displayWinner = (mark) => {
