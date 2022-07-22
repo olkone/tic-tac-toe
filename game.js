@@ -132,31 +132,23 @@ const Game = (() => {
         };
     };
 
-    const checkTie = () => {
+    const _checkTie = () => {
         const numEmptyBoxes = board.length - board.filter(String).length;
-        
         if (numEmptyBoxes === 0) {
             return true;
         }
     };
 
-    const checkWinner = () => {
+    const _checkWinner = () => {
         const Os = _getIndices().OIndices;
         const Xs = _getIndices().XIndices;
 
         for (pattern of _winPatterns) {
-
-            if (_checkPattern(pattern, Xs) === false && _checkPattern(pattern, Os) === false && checkTie() === true) {
-                console.log('tied!!!!!!');
-            } else if (_checkPattern(pattern, Xs)) {
-                _addPoint('X');
-                DOM.displayWinner('X'); // instead, return 'X' then write another function that checks results
-                DOM.endGame();
+            if (_checkPattern(pattern, Xs)) {
+                return 'X';
 
             } else if (_checkPattern(pattern, Os)) {
-                _addPoint('O');
-                DOM.displayWinner('O');
-                DOM.endGame();
+                return 'O';
             }
         };
     };
@@ -168,12 +160,26 @@ const Game = (() => {
         }
     };
 
+    const checkStatus = () => {
+        switch(true) {
+            case _checkWinner() === 'X':
+                _addPoint('X');
+                return 'X';
+
+            case _checkWinner() === 'O':
+                _addPoint('O');
+                return 'O'
+
+            case _checkTie():
+                return 'tie';
+        }
+    };
+
     return {
         playerOne,
         playerTwo,
         checkEmpty,
-        checkWinner,
-        checkTie,
+        checkStatus,
         getPlayerWithMark,
     };
 
@@ -200,6 +206,30 @@ const DOM = (() => {
         };
     };
 
+    const _checkGameStatus = (e) => {
+        Game.checkEmpty(e);
+        _displayTurn();
+
+        switch(Game.checkStatus()) {
+            case 'tie':
+                console.log('tied!');
+                _endGame();
+                break;
+            
+            case 'X':
+                console.log('x works');
+                _displayWinner('X');
+                _endGame();
+                break;
+            
+            case 'O':
+                console.log('o works');
+                _displayWinner('O');
+                _endGame();
+                break;
+        }
+    };
+
     const _initBoard = () => {
         const gameBoard = GameBoard.getBoard();
         const boardDisplay = document.querySelector("#gameboard");
@@ -217,10 +247,7 @@ const DOM = (() => {
 
         boxes.forEach((box) => {
             box.addEventListener("click", (e) => {
-                Game.checkEmpty(e);
-                _displayTurn();
-                Game.checkWinner();
-                Game.checkTie();
+                _checkGameStatus(e);
             }); 
         });
     };
@@ -230,14 +257,6 @@ const DOM = (() => {
         const p2Score = document.querySelector("#p2-score");
         p1Score.innerText = Game.playerOne.score;
         p2Score.innerText = Game.playerTwo.score;
-    };
-
-    const startGame = () => {
-        GameBoard.makeBoard();
-        _initBoard();
-        _displayScore();
-        gameArea.style.display = "flex";
-        startArea.style.display = "none";
     };
 
     const _resetGame = () => {
@@ -250,7 +269,15 @@ const DOM = (() => {
         winDisplay.style.display = "none";
     };
 
-    const endGame = () => {
+    const _startGame = () => {
+        GameBoard.makeBoard();
+        _initBoard();
+        _displayScore();
+        gameArea.style.display = "flex";
+        startArea.style.display = "none";
+    };
+
+    const _endGame = () => {
         if (Game.playerOne.score > 2 || Game.playerTwo.score > 2) {
             againBtn.style.display = "block";
             nextBtn.style.display = "none";
@@ -270,8 +297,7 @@ const DOM = (() => {
         };
     };
 
-    const displayWinner = (mark) => {
-
+    const _displayWinner = (mark) => {
         winDisplay.innerText = Game.getPlayerWithMark(mark).name + ' wins!';
         _displayScore();
         nextBtn.style.display = "block"
@@ -280,13 +306,8 @@ const DOM = (() => {
     };
 
     startBtn.addEventListener("click", () => {
-        startGame();
+        _startGame();
         _displayTurn();
     });
 
-    return {
-        startGame,
-        endGame,
-        displayWinner,
-    };
 })();
