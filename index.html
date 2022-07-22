@@ -5,23 +5,39 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
-    <script src="./ttt.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400&family=Poppins:wght@200&display=swap" rel="stylesheet">
+    <script src="./game.js" defer></script>
     <title>Tic Tac Toe</title>
 </head>
 <body>
-    <button id="start-btn">Start Game</button>
+    <div class="start-area">
+        <h1>Tic Tac Toe</h1>
+        <h2>First to 3 wins.</h2>
+        <form>
+            <legend for="marker">Player One, choose your marker:</legend>
+            <label for="x-radio">X</label>
+            <input type="radio" name="marker" id="x-radio" value="X">
+            <label for="o-radio">O</label>
+            <input type="radio" name="marker" id="o-radio" value="O">
+        </form>
+        <button id="start-btn" onsubmit="return false;">Start Game</button>
+    </div>   
+
     <button id="next-btn">Next Round</button>
     <button id="play-again-btn">Play Again</button>
+
     <div class="game-area">
         <div id="turn-cont">
             <span id="player-turn"></span><span>'s turn</span>
         </div>
-        <div id="gameboard"></div>
-        <div id="scores">
+        <div class="inline">
             <div class="score">
                 <p>Player One:</p>
                 <p id="p1-score"></p>
             </div>
+            <div id="gameboard"></div>
             <div class="score">
                 <p>Player Two:</p>
                 <p id="p2-score"></p>
