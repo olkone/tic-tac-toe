@@ -1,3 +1,9 @@
+$background-color: rgb(241, 241, 241);
+$text-color: rgb(50, 50, 55);
+
+$line-color: rgba(70, 70, 77, 0.94);
+$box-color: white;
+
 html,
 body {
     margin: 0;
@@ -5,13 +11,35 @@ body {
     height: 100%;
     width: 100%;
     box-sizing: border-box;
+
+    background-color: $background-color;
+    color: $text-color;
+    font-family:'Poppins', Verdana, Geneva, Tahoma, sans-serif
 }
 
 body {
     position: relative;
     display: flex;
     justify-content: center;
-    background-color: rgb(162, 162, 162);
+}
+
+.start-area {
+    display: flex;
+    flex: auto;
+    flex-flow: column nowrap;
+    gap: 30px;
+
+    align-items: center;
+
+    form {
+        text-align: center;
+    }
+
+    #start-btn {
+        display: block;
+        height: 40px;
+        width: 100px;
+    }
 }
 
 button {
@@ -19,11 +47,6 @@ button {
     width: 100px;
 }
 
-#start-btn {
-    display: block;
-    height: 40px;
-    width: 100px;
-}
 
 #next-btn {
     display: none;
@@ -37,10 +60,17 @@ button {
 
 .game-area {
     display: none;
+    flex: auto;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
 
-
+    height: max-content;
+    margin-top: 15vh;
     #turn-cont {
         display: none;
+
     }
 
     #gameboard {
@@ -53,21 +83,50 @@ button {
         margin: auto;
         height: max-content;
         width: max-content;
-        background-color: black;
-    
+
+        background-color: $line-color;
+        border-radius: 2px;
+        box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.295);
+
         .box {
             display: flex;
-            background-color: white;
             height: 100%;
             width: 100%;
             align-items: center;
             justify-content: center;
+
+            background-color: $box-color;
+            border-radius: 2px;
+
+
+            font-family: 'Comfortaa', sans-serif;
+            font-size: 2rem;
+        }
+
+        .box:hover {
+            background-color: darken($box-color, 7.5%);
         }
     }
-    
-    #scores {
+
+    .inline {
         display: flex;
+        flex: auto;
+        flex-flow: row wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
     
+        .score {
+            display: flex;
+            flex: auto;
+            flex-flow: column;
+
+            align-items: center;
+
+            p:last-of-type {
+                font-size: 2rem;
+            }
+        }
     }
     
 }
